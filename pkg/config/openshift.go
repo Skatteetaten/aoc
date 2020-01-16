@@ -37,6 +37,7 @@ type Cluster struct {
 	Token     string `json:"token"`
 	Reachable bool   `json:"reachable"`
 	BooberUrl string `json:"booberUrl"`
+	GoboUrl   string `json:"goboUrl"`
 }
 
 func (ao *AOConfig) InitClusters() {
@@ -47,6 +48,7 @@ func (ao *AOConfig) InitClusters() {
 		name := cluster
 		booberURL := fmt.Sprintf(ao.BooberUrlPattern, name)
 		clusterURL := fmt.Sprintf(ao.ClusterUrlPattern, name)
+		goboUrl := fmt.Sprintf(ao.GoboUrlPattern, name)
 		go func() {
 			reachable := false
 			resp, err := client.Get(booberURL)
@@ -63,6 +65,7 @@ func (ao *AOConfig) InitClusters() {
 				Url:       fmt.Sprintf(ao.ClusterUrlPattern, name),
 				Reachable: reachable,
 				BooberUrl: booberURL,
+				GoboUrl:   goboUrl,
 			}
 		}()
 	}

@@ -70,6 +70,7 @@ func getAPIClient(auroraConfig, overrideToken, overrideCluster string) (*client.
 		}
 
 		api.Host = c.BooberUrl
+		api.GoboHost = c.GoboUrl
 		api.Token = c.Token
 		if overrideToken != "" {
 			api.Token = overrideToken

@@ -141,6 +141,7 @@ func initialize(cmd *cobra.Command, args []string) error {
 	api := &client.ApiClient{
 		Affiliation: aoConfig.Affiliation,
 		Host:        apiCluster.BooberUrl,
+		GoboHost:    apiCluster.GoboUrl,
 		Token:       apiCluster.Token,
 		RefName:     aoConfig.RefName,
 	}

@@ -30,6 +30,7 @@ type ResponseBundle struct {
 
 type ApiClient struct {
 	Host        string
+	GoboHost    string
 	Token       string
 	Affiliation string
 	RefName     string

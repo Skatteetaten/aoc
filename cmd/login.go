@@ -106,10 +106,13 @@ func Login(cmd *cobra.Command, args []string) error {
 	DefaultApiClient.Token = cluster.Token
 
 	host := cluster.BooberUrl
+	gobohost := cluster.GoboUrl
+
 	if AO.Localhost {
 		host = "http://localhost:8080"
 	}
 	DefaultApiClient.Host = host
+	DefaultApiClient.GoboHost = gobohost
 
 	acn, err := DefaultApiClient.GetAuroraConfigNames()
 	if err != nil {

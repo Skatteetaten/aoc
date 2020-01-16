@@ -27,6 +27,7 @@ type AOConfig struct {
 	ClusterUrlPattern       string   `json:"clusterUrlPattern"`
 	BooberUrlPattern        string   `json:"booberUrlPattern"`
 	UpdateUrlPattern        string   `json:"updateUrlPattern"`
+	GoboUrlPattern          string   `json:"goboUrlPattern"`
 }
 
 var DefaultAOConfig = AOConfig{
@@ -38,6 +39,7 @@ var DefaultAOConfig = AOConfig{
 	ClusterUrlPattern:       "https://%s-master.paas.skead.no:8443",
 	BooberUrlPattern:        "http://boober-aurora.%s.paas.skead.no",
 	UpdateUrlPattern:        "http://ao-aurora-tools.%s.paas.skead.no",
+	GoboUrlPattern:          "http://gobo.aurora.%s.paas.skead.no",
 }
 
 func LoadConfigFile(configLocation string) (*AOConfig, error) {

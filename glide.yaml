@@ -11,3 +11,4 @@ import:
   version: v1.1.4
 - package: github.com/mitchellh/go-homedir
 - package: github.com/andybalholm/crlf
+- package: github.com/machinebox/graphql
