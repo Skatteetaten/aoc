@@ -32,10 +32,10 @@ type RefreshResponse struct {
 }
 
 const RefreshGraphqlRequest = `
-    mutation {
+    mutation ($applicationDeploymentId: String!) {
       refreshApplicationDeployment(input: {
-        applicationDeploymentId: "%s"
-      }) 
+        applicationDeploymentId: $applicationDeploymentId
+      })
     }
     `
 
@@ -46,7 +46,7 @@ func refresh(cmd *cobra.Command, args []string) error {
 
 	client := DefaultApiClient.GetGraphQlClient()
 	// make a request
-	req := graphql.NewRequest(fmt.Sprintf(RefreshGraphqlRequest, args[0]))
+	req := graphql.NewRequest(RefreshGraphqlRequest)
 	req.Var("applicationDeploymentId", args[0])
 	req.Header.Set("Cache-Control", "no-cache")
 	req.Header.Add("Authorization", "Bearer "+DefaultApiClient.Token)
