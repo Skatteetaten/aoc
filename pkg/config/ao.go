@@ -29,6 +29,7 @@ type AOConfig struct {
 	BooberURLPattern        string   `json:"booberUrlPattern"`
 	UpdateURLPattern        string   `json:"updateUrlPattern"`
 	GoboURLPattern          string   `json:"goboUrlPattern"`
+	GoboURLSecurePattern    string   `json:"goboURLSecurePattern"`
 }
 
 // DefaultAOConfig is an AOConfig with default values
@@ -42,6 +43,7 @@ var DefaultAOConfig = AOConfig{
 	BooberURLPattern:        "http://boober-aurora.%s.paas.skead.no",
 	UpdateURLPattern:        "http://ao-aurora-tools.%s.paas.skead.no",
 	GoboURLPattern:          "http://gobo.aurora.%s.paas.skead.no",
+	GoboURLSecurePattern:    "https://gobo-aurora.%s.paas.skead.no",
 }
 
 // LoadConfigFile loads an AOConfig file from file system

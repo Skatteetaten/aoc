@@ -20,6 +20,7 @@ var (
 			timeout := time.Duration(1 * time.Second)
 			return net.DialTimeout(network, addr, timeout)
 		},
+		//TODO: Change to InsecureSkipVerify: false when presence of CA certificates are validated on platforms using ao
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
@@ -50,7 +51,13 @@ func (ao *AOConfig) InitClusters() {
 		name := cluster
 		booberURL := fmt.Sprintf(ao.BooberURLPattern, name)
 		clusterURL := fmt.Sprintf(ao.ClusterURLPattern, name)
+
+		//TODO: Change as more clusters get TLS enabled gobo API end points
 		goboURL := fmt.Sprintf(ao.GoboURLPattern, name)
+		if name == "utv" {
+			goboURL = fmt.Sprintf(ao.GoboURLSecurePattern, name)
+		}
+
 		go func() {
 			reachable := false
 			resp, err := client.Get(booberURL)

@@ -34,6 +34,7 @@ func (api *APIClient) RunGraphQlMutation(graphQlRequest *graphql.Request, respon
 func (api *APIClient) getGraphQlClient() *graphql.Client {
 	endpoint := fmt.Sprintf("%s/graphql", api.GoboHost)
 	client := graphql.NewClient(endpoint)
+	logrus.Debugf("Got graphql client for %s", api.GoboHost)
 	client.Log = func(logEntry string) { logrus.Debug(logEntry) }
 	return client
 }
