@@ -27,8 +27,8 @@ var (
 	errNotValidSecretArgument = errors.New("not a valid argument, must be <vaultname/secret>")
 )
 
-const createVaultLong = `Create a vault for storing secrets. A vault requires permissions for one or more groups. 
-These permissions are necessary to access the vault. 
+const createVaultLong = `Create a vault for storing secrets. A vault requires permissions for one or more
+users and/or groups. These permissions are necessary to access the vault.
 `
 
 var (
@@ -45,8 +45,8 @@ var (
 	}
 
 	vaultCreateCmd = &cobra.Command{
-		Use:   "create <vaultname> <folder/file> <group(s)>",
-		Short: "Create a new vault with secrets with permissions for one or more group(s)",
+		Use:   "create <vaultname> <folder/file> <user/group(s)>",
+		Short: "Create a new vault with secrets with permissions for one or more users and/or groups",
 		Long:  createVaultLong,
 		RunE:  CreateVault,
 	}
@@ -77,13 +77,13 @@ var (
 	}
 
 	vaultAddPermissionsCmd = &cobra.Command{
-		Use:   "add-permissions <vaultname> <groups>",
+		Use:   "add-permissions <vaultname> <users/groups>",
 		Short: "Add permissions on a vault",
 		RunE:  VaultAddPermissions,
 	}
 
 	vaultRemovePermissionsCmd = &cobra.Command{
-		Use:   "remove-permissions <vaultname> <groups>",
+		Use:   "remove-permissions <vaultname> <users/groups>",
 		Short: "Remove permissions on a vault",
 		RunE:  VaultRemovePermissions,
 	}
