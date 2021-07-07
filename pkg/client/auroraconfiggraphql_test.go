@@ -100,3 +100,22 @@ func TestApiClient_UpdateAuroraConfigFile(t *testing.T) {
 		assert.Contains(t, err.Error(), "Could not update file")
 	})
 }
+
+func TestApiClient_GetFileNames(t *testing.T) {
+	t.Run("Should get all filenames in AuroraConfig for a given affiliation", func(t *testing.T) {
+		responseFileName := "auroraconfig_files_name_response"
+		response := ReadTestFile(responseFileName)
+
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			w.Write(response)
+		}))
+		defer ts.Close()
+
+		api := NewAPIClientDefaultRef("", ts.URL, "test", affiliation, "")
+		fileNames, err := api.GetFileNames()
+		assert.NoError(t, err)
+		assert.Len(t, fileNames, 4)
+	})
+}

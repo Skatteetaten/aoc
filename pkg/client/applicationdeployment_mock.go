@@ -40,7 +40,9 @@ func (api *ApplicationDeploymentClientMock) Exists(existsPayload *ExistsPayload)
 	results := make([]ExistsResult, len(existsPayload.ApplicationDeploymentRefs))
 
 	for i := range existsPayload.ApplicationDeploymentRefs {
-		results[i] = ExistsResult{Success: true, Message: "OK", Exists: true, ApplicationRef: ApplicationRef{}}
+		results[i] = ExistsResult{Success: true, Message: "OK", Exists: true, ApplicationRef: ApplicationRef{
+			Name: existsPayload.ApplicationDeploymentRefs[i].Application,
+		}}
 	}
 
 	return &ExistsResults{Message: "Successful", Success: true, Results: results}, nil

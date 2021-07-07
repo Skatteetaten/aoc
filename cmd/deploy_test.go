@@ -11,6 +11,7 @@ import (
 func Test_deployToReachableClusters(t *testing.T) {
 	auroraConfig := "jupiter"
 	overrideToken := ""
+	environment := "env"
 
 	deployClientMock := client.NewApplicationDeploymentClientMock()
 
@@ -19,10 +20,10 @@ func Test_deployToReachableClusters(t *testing.T) {
 	}
 
 	partitions := []DeploySpecPartition{
-		*newDeploySpecPartition(testSpecs[0:3], *newTestCluster("east", true), auroraConfig, overrideToken),
-		*newDeploySpecPartition(testSpecs[3:7], *newTestCluster("west", true), auroraConfig, overrideToken),
-		*newDeploySpecPartition(testSpecs[7:11], *newTestCluster("west", true), auroraConfig, overrideToken),
-		*newDeploySpecPartition(testSpecs[11:13], *newTestCluster("north", true), auroraConfig, overrideToken),
+		*newDeploySpecPartition(testSpecs[0:3], *newTestCluster("east", true), auroraConfig, environment, overrideToken),
+		*newDeploySpecPartition(testSpecs[3:7], *newTestCluster("west", true), auroraConfig, environment, overrideToken),
+		*newDeploySpecPartition(testSpecs[7:11], *newTestCluster("west", true), auroraConfig, environment, overrideToken),
+		*newDeploySpecPartition(testSpecs[11:13], *newTestCluster("north", true), auroraConfig, environment, overrideToken),
 	}
 
 	deployClientMock.On("Deploy", mock.Anything).Times(4)
@@ -38,6 +39,7 @@ func Test_deployToReachableClusters(t *testing.T) {
 func Test_deployToUnreachableClusters(t *testing.T) {
 	auroraConfig := "jupiter"
 	overrideToken := ""
+	environment := "env"
 
 	deployClientMock := client.NewApplicationDeploymentClientMock()
 
@@ -46,7 +48,7 @@ func Test_deployToUnreachableClusters(t *testing.T) {
 	}
 
 	partitions := []DeploySpecPartition{
-		*newDeploySpecPartition(testSpecs[0:3], *newTestCluster("east", false), auroraConfig, overrideToken),
+		*newDeploySpecPartition(testSpecs[0:3], *newTestCluster("east", false), auroraConfig, environment, overrideToken),
 	}
 
 	results, err := deployToReachableClusters(getClient, partitions, map[string]string{})

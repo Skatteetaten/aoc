@@ -112,6 +112,32 @@ func (api *APIClient) UpdateAuroraConfigFile(file *auroraconfig.File, eTag strin
 	return nil
 }
 
+// GetFileNames gets file names via API calls
+func (api *APIClient) GetFileNames() (auroraconfig.FileNames, error) {
+	const getFileNamesRequest = `query auroraConfig($auroraConfigName: String!){auroraConfig(name: $auroraConfigName){files{name}}}`
+	type FileNamesResponse struct {
+		AuroraConfig struct {
+			Files []struct {
+				Name string `json:"name"`
+			} `json:"files"`
+		} `json:"auroraConfig"`
+	}
+	vars := map[string]interface{}{"auroraConfigName": api.Affiliation}
+	var fileNamesResponse FileNamesResponse
+
+	if err := api.RunGraphQl(getFileNamesRequest, vars, &fileNamesResponse); err != nil {
+		return nil, err
+	}
+
+	var fileNames auroraconfig.FileNames
+	if len(fileNamesResponse.AuroraConfig.Files) > 0 {
+		for _, file := range fileNamesResponse.AuroraConfig.Files {
+			fileNames = append(fileNames, file.Name)
+		}
+	}
+	return fileNames, nil
+}
+
 func validateFileContentIsJSON(file *auroraconfig.File) error {
 	_, err := json.Marshal(file.Contents)
 	if err != nil {

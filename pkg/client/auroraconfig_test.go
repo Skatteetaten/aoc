@@ -47,21 +47,6 @@ func TestApi_GetAuroraConfig(t *testing.T) {
 	})
 }
 
-func TestApiClient_GetFileNames(t *testing.T) {
-	t.Run("Should get all filenames in AuroraConfig for a given affiliation", func(t *testing.T) {
-
-		fileName := "filenames_paas_success_response"
-		ts := httptest.NewServer(AuroraConfigSuccessResponseHandler(t, fileName))
-		defer ts.Close()
-
-		api := NewAPIClientDefaultRef(ts.URL, "", "", affiliation, "")
-		fileNames, err := api.GetFileNames()
-
-		assert.NoError(t, err)
-		assert.Len(t, fileNames, 4)
-	})
-}
-
 func TestApiClient_ValidateAuroraConfig(t *testing.T) {
 	t.Run("Successfully validate and save AuroraConfig", func(t *testing.T) {
 		fileName := "auroraconfig_paas_success_response"

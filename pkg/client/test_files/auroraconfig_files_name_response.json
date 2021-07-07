@@ -1,0 +1,20 @@
+{
+  "data": {
+    "auroraConfig": {
+      "files": [
+        {
+          "name": "about.json"
+        },
+        {
+          "name": "referanse.json"
+        },
+        {
+          "name": "dev/about.json"
+        },
+        {
+          "name": "dev/referanse.json"
+        }
+      ]
+    }
+  }
+}

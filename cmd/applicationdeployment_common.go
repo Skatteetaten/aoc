@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 
 	"github.com/pkg/errors"
 	"github.com/skatteetaten/ao/pkg/client"
@@ -18,6 +19,13 @@ var (
 	flagExcludes     []string
 )
 
+var applicationDeploymentCmd = &cobra.Command{
+	Use:         "applicationdeployment",
+	Aliases:     []string{"ad"},
+	Short:       "Perform operations on an application deployment",
+	Annotations: map[string]string{"type": "actions"},
+}
+
 // DeploymentInfo structures information about a deployment
 type DeploymentInfo struct {
 	Namespace   string
@@ -25,17 +33,22 @@ type DeploymentInfo struct {
 	ClusterName string
 }
 
-// Partition structures information about a partition
+// Partition structures information about a Cluster+AuroraConfigName+Environment-partition
 type Partition struct {
 	Cluster          config.Cluster
 	AuroraConfigName string
+	Environment      string
 	OverrideToken    string
 }
 
-// DeploySpecPartition structures information about a partition of a deployment specification
+// DeploySpecPartition structures deployment specifications in a partition
 type DeploySpecPartition struct {
 	Partition
 	DeploySpecs []deploymentspec.DeploymentSpec
+}
+
+func init() {
+	RootCmd.AddCommand(applicationDeploymentCmd)
 }
 
 func newDeploymentInfo(namespace, name, cluster string) *DeploymentInfo {
@@ -46,12 +59,13 @@ func newDeploymentInfo(namespace, name, cluster string) *DeploymentInfo {
 	}
 }
 
-func newDeploySpecPartition(deploySpecs []deploymentspec.DeploymentSpec, cluster config.Cluster, auroraConfig string, overrideToken string) *DeploySpecPartition {
+func newDeploySpecPartition(deploySpecs []deploymentspec.DeploymentSpec, cluster config.Cluster, auroraConfig string, environment string, overrideToken string) *DeploySpecPartition {
 	return &DeploySpecPartition{
 		DeploySpecs: deploySpecs,
 		Partition: Partition{
 			Cluster:          cluster,
 			AuroraConfigName: auroraConfig,
+			Environment:      environment,
 			OverrideToken:    overrideToken,
 		},
 	}
@@ -75,7 +89,7 @@ func createDeploySpecPartitions(auroraConfig, overrideToken string, clusters map
 				return nil, errors.New(fmt.Sprintf("No such cluster %s", clusterName))
 			}
 			cluster := clusters[clusterName]
-			partition := newDeploySpecPartition([]deploymentspec.DeploymentSpec{}, *cluster, auroraConfig, overrideToken)
+			partition := newDeploySpecPartition([]deploymentspec.DeploymentSpec{}, *cluster, auroraConfig, envName, overrideToken)
 			partitionMap[partitionID] = partition
 		}
 

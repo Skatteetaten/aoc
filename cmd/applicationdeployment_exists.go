@@ -88,3 +88,37 @@ func performExists(deployClient client.ApplicationDeploymentClient, partition De
 		partialResult <- newPartialExistsResults(partition, *results)
 	}
 }
+
+func getDeployedDeploymentSpecs(getClient func(partition Partition) client.ApplicationDeploymentClient, deploySpecs []deploymentspec.DeploymentSpec, auroraConfigName, overrideToken string) ([]deploymentspec.DeploymentSpec, error) {
+	deploySpecPartitions, err := createDeploySpecPartitions(auroraConfigName, overrideToken, AO.Clusters, deploySpecs)
+	if err != nil {
+		return nil, err
+	}
+
+	partialResults, err := checkExistence(getClient, deploySpecPartitions)
+	if err != nil {
+		return nil, err
+	}
+
+	var activeApplicationSpecs []deploymentspec.DeploymentSpec = make([]deploymentspec.DeploymentSpec, 0)
+	for _, partialResult := range partialResults {
+		if !partialResult.existsResults.Success {
+			return nil, errors.New("Failed to retrieve application deployment information from cluster")
+		}
+		environment := partialResult.partition.Environment
+		deploySpecs := partialResult.partition.DeploySpecs
+
+		for _, existsResult := range partialResult.existsResults.Results {
+			if existsResult.Exists {
+				appName := existsResult.ApplicationRef.Name
+				for _, deploySpec := range deploySpecs {
+					if deploySpec.Name() == appName && deploySpec.Environment() == environment {
+						activeApplicationSpecs = append(activeApplicationSpecs, deploySpec)
+					}
+				}
+			}
+		}
+	}
+
+	return activeApplicationSpecs, nil
+}

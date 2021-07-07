@@ -21,24 +21,6 @@ type AuroraConfigClient interface {
 	GetAuroraConfigFile(fileName string) (*auroraconfig.File, string, error)
 }
 
-// GetFileNames gets file names via API calls
-func (api *APIClient) GetFileNames() (auroraconfig.FileNames, error) {
-	endpoint := fmt.Sprintf("/auroraconfig/%s/filenames", api.Affiliation)
-
-	response, err := api.Do(http.MethodGet, endpoint, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	var fileNames auroraconfig.FileNames
-	err = response.ParseItems(&fileNames)
-	if err != nil {
-		return nil, err
-	}
-
-	return fileNames, nil
-}
-
 // GetAuroraConfig gets an aurora config via API calls
 func (api *APIClient) GetAuroraConfig() (*auroraconfig.AuroraConfig, error) {
 	endpoint := fmt.Sprintf("/auroraconfig/%s", api.Affiliation)
